@@ -1,0 +1,5 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: S3 Bucket
+Resources:
+  S3BKF14:
+    Type: 'AWS::S3::Bucket'
