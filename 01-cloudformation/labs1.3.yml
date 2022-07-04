@@ -7,4 +7,4 @@ Resources:
   S3BKF14:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref S3BucketName
+      BucketName: !Join [ '-', [!Ref 'AWS::AccountId', !Ref 'S3BucketName'] ]
