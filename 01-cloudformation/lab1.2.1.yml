@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  UserName:
+    Type: String
+    Default: Likhith-1
+  UserPassword:
+    Type: String
+    Default: Likhith@123
+Resources:
+  MyUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Ref UserName
+      LoginProfile:
+        Password: !Ref UserPassword
+      ManagedPolicyArns:
+        -arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+Outputs:
+  OutputName:
+    Description: User name
+    Value: !Ref MyUser
