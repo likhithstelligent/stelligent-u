@@ -2,22 +2,22 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   UserName:
     Type: String
-    Default: Likhith-1
+    Default: Likhith77
   UserPassword:
     Type: String
-    Default: Likhith@123
+    Default: Likhith@135
 Resources:
-  MyUser:
+  myUser:
     Type: AWS::IAM::User
     Properties:
       UserName: !Ref UserName
       LoginProfile:
         Password: !Ref UserPassword
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        Fn::ImportValue: !Sub ManagedPolicyArns
 Outputs:
   OutputName:
     Description: User name
-    Value: !Ref MyUser
-    Export:
-      Name: "ManagedPolicyArns"
+    Value: !Ref myUser
+    ManagedPolicyArns:
+        Fn::ImportValue: !Sub ManagedPolicyArns
