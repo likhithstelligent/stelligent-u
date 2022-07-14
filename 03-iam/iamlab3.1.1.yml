@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Inline policy
+Resources:
+  MyTestRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+        PolicyName: likhithinlinepolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            Effect: Allow
+            Action:
+              - 'iam:Get*'
+              - 'iam:List*'
+              - 'iam:Generate*'
+          Resource: '*'
+      Users:
+        - lambadi.l.labs

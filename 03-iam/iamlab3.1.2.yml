@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Custommanagedpolicy
+Resources:
+  myCustomerManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: customerManagedLikhithPolicy
+      Description: Customer managed policy for read only access
+      Path: '/'
+      PolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 
+              - 'ec2:Describe'
+              -  'iam:Get*'
+              - 'iam:List*'
+              - 'iam:Generate*'
+            Resource: '*'
+      Users:
+        - lambadi.l.labs
