@@ -2,8 +2,9 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: Custommanagedpolicy
 Resources:
   myCustomerManagedPolicy:
-    Type: AWS::IAM::ManagedPolicy
+    Type: 'AWS::IAM::ManagedPolicy'
     Properties:
+      MyManagedPolicy:
       ManagedPolicyName: customerManagedLikhithPolicy
       Description: Customer managed policy for read only access
       Path: '/'
@@ -16,6 +17,6 @@ Resources:
               -  'iam:Get*'
               - 'iam:List*'
               - 'iam:Generate*'
-            Resource: '*'
+          Resource: '*'
       Users:
         - lambadi.l.labs

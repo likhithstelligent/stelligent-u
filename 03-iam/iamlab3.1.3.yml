@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Custommanagedpolicy
+Parameters:
+  AwsManagedPolicyParameterOne:
+    Type: String
+    Description: ARN of Customer Managed Policy to add to the role
+    Default: 'arn:aws:iam::324320755747:policy/customerManagedLikhithPolicy'
+Resources:
+  myCustomerManagedPolicy:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - !Ref AwsManagedPolicyParameterOne
