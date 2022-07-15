@@ -1,0 +1,28 @@
+ AWSTemplateFormatVersion: 2010-09-09
+Description: Custommanagedpolicy
+Parameters:
+  AwsManagedPolicyParameterOne:
+    Type: String
+    Description: ARN of Customer Managed Policy to add to the role
+    Default: arn:aws:iam::aws:policy/IAMReadOnlyAccess
+  AwsManagedPolicyParameterTwo:
+    Type: String
+    Description: ARN of AWS Managed Policy
+    Default: arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+Resources:
+  myCustomerManagedPolicy:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - !Ref AwsManagedPolicyParameterOne
+        - !ReF AwsManagedPolicyParameterTwo
