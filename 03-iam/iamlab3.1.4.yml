@@ -1,4 +1,4 @@
- AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: 2010-09-09
 Description: Custommanagedpolicy
 Parameters:
   AwsManagedPolicyParameterOne:
@@ -25,4 +25,4 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - !Ref AwsManagedPolicyParameterOne
-        - !ReF AwsManagedPolicyParameterTwo
+        - !Ref AwsManagedPolicyParameterTwo
