@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: likhith vpc
+Parameters:
+  UserName:
+    Type: String
+    Description: User Name
+  Lesson:
+    Type: String
+    Description: Lesson
+  Lab:
+    Type: String
+    Description: Lab
+  VPCCidrBlock:
+    Type: String
+    Description: VPC Cidr Block
+  SubnetPrivateCidrBlock:
+    Type: String
+    Description: Cidr Block for Subnet Private
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCidrBlock
+  SubnetPrivate:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref SubnetPrivateCidrBlock
+      AvailabilityZone: "us-east-1a"
+      VpcId: !Ref VPC
+
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-IGW"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+Outputs:
+  VPCIdOutput:
+    Description: VPC Id
+    Value: !Ref VPC
+  SubnetPrivateOutput:
+    Description: Subnet Private Id
+    Value: !Ref SubnetPrivateCidrBlock

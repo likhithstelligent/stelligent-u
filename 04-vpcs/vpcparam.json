@@ -1,0 +1,22 @@
+[
+    {
+        "ParameterKey": "UserName",
+        "ParameterValue": "likith"
+    },
+    {
+        "ParameterKey": "Lesson",
+        "ParameterValue": "vpc"
+    },
+    {
+        "ParameterKey": "Lab",
+        "ParameterValue": "lab4.1.1"
+    },
+    {
+        "ParameterKey": "VPCCidrBlock",
+        "ParameterValue": "10.1.1.0/16"
+    },
+    {
+        "ParameterKey": "SubnetPrivateCidrBlock",
+        "ParameterValue": "10.1.1.1/24"
+    }
+]
