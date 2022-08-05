@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: likhith vpc
+Parameters:
+  UserName:
+    Type: String
+    Description: User Name
+  Lesson:
+    Type: String
+    Description: Lesson
+  Lab:
+    Type: String
+    Description: Lab
+  VPCCidrBlock:
+    Type: String
+    Description: VPC Cidr Block
+  SubnetPrivateCidrBlock:
+    Type: String
+    Description: Cidr Block for Subnet Private
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VPCCidrBlock
+  SubnetPrivate:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Ref SubnetPrivateCidrBlock
+      AvailabilityZone: "us-east-1a"
+      VpcId: !Ref VPC
+
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.1.1.0/24
+      AvailabilityZone: us-east-1a
+  PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.1.4.0/24
+      AvailabilityZone: us-east-1b   
+  myInternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  vpcInternetGatewayAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref myInternetGateway
+  PublicRouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Vpc
+  PublicInternetGatewayRoute:
+    Type: 'AWS::EC2::Route'
+    DependsOn:
+      - myInternetGateway
+      - vpcInternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref myInternetGateway
+  PublicSubnetRouteTableAssociation:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+  Myelasticnatgatewayip:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  NATGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId:
+        'Fn::GetAtt': Myelasticnatgatewayip.AllocationId
+      SubnetId: !Ref PrivateSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-VPC"
+        - Key: user
+          Value: !Ref UserName
+        - Key: stelligent-u-lesson
+          Value: !Ref Lesson
+        - Key: stelligent-u-lab
+          Value: !Ref Lab
+  PrivatesubnetrouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Vpc
+  PrivatesubnetRoute:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref PrivatesubnetrouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSh access via port 22
+      VpcId: !Ref Vpc
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0    
+Outputs:
+  myvpcid:
+    Description: vpcid referrring
+    Value: !Ref Vpc
+Parameters:
+  VpcCIDR:
+    Type: String
+    Description: VPC CIDR
+    Default: 10.1.0.0/16
